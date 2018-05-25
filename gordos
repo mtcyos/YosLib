@@ -1,0 +1,38 @@
+#!/bin/bash
+# lista de directorios mas grandes
+
+ayuda()
+{
+	echo "./gordos [directorio] [numero de archivos mostrados]"
+	exit 1
+}
+
+if [ $1 = -h ];
+then
+	ayuda
+	exit 1
+fi
+
+case $# in
+0) echo "0 argumentos se aplican por omision"; dir=$HOME ; num=10  ;;
+1) echo "1 argumento [directorio] " ; dir=$1 ; num=10 ;;
+2) echo "2 argumento [directorio] [numero de archivos mostrados]" ; dir=$1 ; num=$2 ;;
+*) ayuda
+esac	
+
+# Verifivo que exista $dir
+if ! [ -d $dir ]
+then
+	echo "$dir no es un directorio valido"
+	exit 2
+fi
+# Verifivo que 0 < $num > 100
+if [ 0 -eq $num -o $num -gt 99 ];
+then
+	echo "$num tiene que ser entre 1 y 99"
+	exit 3
+fi
+echo "Ejecutando du $dir | sort -n | tail -$num"
+echo "*****************************************"
+du $dir | sort -n | tail -$num
+exit $?
